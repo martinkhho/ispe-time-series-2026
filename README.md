@@ -24,7 +24,9 @@ By the end of this session, you should be able to:
 **CONTENTS:**
 
 Presentation by Martin Ho
-- `slides.html` (HTML) or `slides.pdf` (PDF)
+- `time_series_slides.pdf`
+- This is same as the copy in `docs/slides.pdf` (PDF)
+- Alternatively, see `docs/slides.html` (HTML)
 
 Script by Dorsa Ghahramani
 - `time_series_analysis.R`
