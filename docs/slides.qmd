@@ -14,6 +14,7 @@ format:
     theme: solarized
     css: slides.css
     chalkboard: true
+    pdf-separate-fragments: false
     width: 1280
     height: 720
     margin: 0.08
