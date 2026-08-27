@@ -50,7 +50,7 @@ By the end of this session, you should be able to:
 - Explain what is a **time series**
 - Explain how **time series analyses** can be used in drug utilization research
 - Use **regression** and **ARIMA** to model time series
-- Conduct **interventional ARIMA** analyses
+- Conduct **interrupted time series analyses**
 
 
 ## Disclosures
@@ -89,12 +89,7 @@ $$
 ## Motivating example[@gomes2017association] - background
 
 - The province of Ontario, Canada, introduced limits on blood glucose test strips (BGTS) based on diabetes therapy in 2013
-- Concern over the impact of this policy on:
-  - Test strip utilization and spending
-  - Clinical outcomes
 
-
-## Motivating example - 2013 policy
 
 | Diabetes group                                | Test strip limits        |
 |-----------------------------------------------|--------------------------|
@@ -102,13 +97,17 @@ $$
 | Hypoglycemia-inducing oral antihyperglycemics | Max 400/year (~30/month) |
 | All others                                    | Max 200/year (~16/month) |
 
+- Concern over the impact of this policy on:
+  - Test strip utilization and spending
+  - Clinical outcomes
 
-## Motivating example - BGTS utilization & costs
 
-![BGTS utilization and costs in Ontario](assets/images/example_bgts_utilization_cost.png){fig-alt="Utilization and costs" height="400px" fig-align="center"}
+## Motivating example[@gomes2017association] - BGTS utilization & costs
+
+![BGTS utilization and costs in Ontario](assets/images/example_bgts_utilization_cost.png){fig-alt="Utilization and costs" height="500px" fig-align="center"}
 
 
-## Motivating example - clinical outcomes
+## Motivating example[@gomes2017association] - clinical outcomes
 
 ::: {.columns}
 ::: {.column width="48%"}
@@ -139,12 +138,12 @@ Users were hierarchically defined based on their diabetes drug therapy in the pr
 
 ## Motivating example - emergency department visits
 
-![Rates of emergency department visits for hypoglycemia and hyperglycemia](assets/images/example_bgts_hypoglc_hyperglc.png){fig-alt="ED visits for hypoglycemia and hyperglycemia" height="400px" fig-align="center"}
+![Rates of emergency department visits for hypoglycemia and hyperglycemia](assets/images/example_bgts_hypoglc_hyperglc.png){fig-alt="ED visits for hypoglycemia and hyperglycemia" height="500px" fig-align="center"}
 
 
 ## Motivating example - mean HbA1c
 
-![Mean HbA1c (overall and among high-use cohort)](assets/images/example_bgts_hba1c.png){fig-alt="Mean HbA1c" height="400px" fig-align="center"}
+![Mean HbA1c (overall and among high-use cohort)](assets/images/example_bgts_hba1c.png){fig-alt="Mean HbA1c" height="500px" fig-align="center"}
 
 
 ## Time series characteristics
@@ -214,7 +213,7 @@ Users were hierarchically defined based on their diabetes drug therapy in the pr
 
 ::: {.columns}
 ::: {.column width="48%"}
-- Assess impact of interventions
+- Impact of interventions
 - Forecasting
 :::
 
@@ -280,7 +279,7 @@ x_t
 $$
 
 - $\delta$ is the intercept
-- $\phi$ is the slope (persistence); $|\phi| < 1$ for stationary series, meaning the influence of previous lags decays over time
+- $\phi$ is the slope (persistence); $|\phi| < 1$ for stationary series (more about this later), meaning the influence of previous lags decays over time
 - $w_t \overset{iid}{\sim} N(0,\sigma_w^2)$
 
 
@@ -340,8 +339,10 @@ $$
 - White noise is a special type of stationarity
 - Stationarity may be addressed with **differencing**
 
+::: {.fragment}
 ::: {.key-point}
 ACF and PACF patterns (later) will not have their standard interpretations until the series is stationary. ACF of a non-stationary series will decay very slowly.
+:::
 :::
 
 
@@ -390,7 +391,7 @@ $$
 - Seasonal (here, monthly) differencing:
 
 $$
-\nabla^{12} x_t = x_t – x_{t-12}
+\nabla_{12} x_t = x_t – x_{t-12}
 $$
 
 - Seasonality skips intermediate lags
@@ -399,13 +400,18 @@ $$
 
 ## Moving average (MA model)
 
-- AR processes are not the only way to generate autocorrelation
-- While AR captures autocorrelation in past *values* (e.g., $x_{t-1}$), MA captures autocorrelation in past *shocks* (e.g., $w_{t-1}$)
-- Shocks are prediction errors
+AR processes are not the only way to generate autocorrelation
 
 ::: {.key-point}
-- In AR models, the present value carries information from everything before
-- In MA models, the present value carries information from a set number of lags
+- AR captures autocorrelation in past *values* (e.g., $x_{t-1}$)
+- MA captures autocorrelation in past *shocks* (e.g., $w_{t-1}$)
+:::
+
+Shocks are prediction errors
+
+::: {.key-point}
+- In AR, the present value carries information from everything before
+- In MA, the present value carries information from a fixed number of lags
 :::
 
 
@@ -441,7 +447,7 @@ $$
 | ARMA       | Tapers | Tapers            |
 
 - May not see clean patterns in sample data
-- Sign (+/-) of autocorrelation does not matter for identifying orders
+- Sign (+/-) of autocorrelation does not matter for identifying AR and MA orders
 - If all lags are non-significant, suggests that series is white noise
 
 
@@ -487,16 +493,16 @@ $$
 
 ## Diagnostics
 
-| Check: | What do we want to see? |
-|--------|-------------------------|
-| Coefficients | Significant |
-| ACF plot of the residuals | Not significant |
-| Ljung-Box test for white noise of the residuals | Not significant |
-| Q-Q plot of the residuals | Normality |
-| Histogram of the residuals | Normality |
-| Residuals-versus-fits plot | No heteroskedasticity |
-| Time series plot of the residuals | No heteroskedasticity |
-| Forecasts | Reasonable (e.g., not decreasing when expect to increase) |
+| Check:                                          | What do we want to see?                                   |
+|-------------------------------------------------|-----------------------------------------------------------|
+| Coefficients                                    | Significant                                               |
+| ACF plot of the residuals                       | Not significant                                           |
+| Ljung-Box test for white noise of the residuals | Not significant                                           |
+| Q-Q plot of the residuals                       | Normality                                                 |
+| Histogram of the residuals                      | Normality                                                 |
+| Residuals-versus-fits plot                      | No heteroskedasticity                                     |
+| Time series plot of the residuals               | No heteroskedasticity                                     |
+| Forecasts                                       | Reasonable (e.g., not decreasing when expect to increase) |
 
 - Try a different ARIMA model if unsatisfactory
 
@@ -513,7 +519,8 @@ $$
 
 ## ARIMA steps
 
-1. Plot the time series
+**1. Plot the time series**
+
   - Pay attention to seasonality and trends, informed also by OCSB and ADF tests
   - If both seem possible, do seasonal differencing first as seasonality tends to dominate, then re-evaluate
   - If heteroskedasticity, consider log transform
@@ -521,11 +528,15 @@ $$
 
 ## ARIMA steps
 
-2. Plot correlograms
+**2. Plot correlograms**
+
   - Examine the ACF and PACF
   - Glean AR and MA terms at low lags, and seasonal AR and MA terms at lags at multiples of $S$
-3. Estimate the model
-4. Perform diagnostics and select the best model
+
+**3. Estimate the model**
+
+**4. Perform diagnostics and select the best model**
+
   - Iterate if necessary
 
 
@@ -535,7 +546,7 @@ $$
 - Ecological; in Ontario, Canada, we use administrative claims data stored at ICES
 
 ::: {.fragment}
-- **Quasi-experimental studies (QES)** (intervention is as good as random, because assignment is plausibly unrelated to the outcome)
+- **Quasi-experimental studies (QES):** intervention is as good as random, because assignment is plausibly unrelated to the outcome
 - **Interrupted time series (ITS) analysis** is one type of QES; counterfactual is what the time series would have been had the intervention not occurred
   - Segmented regression
   - Interventional ARIMA
@@ -583,7 +594,7 @@ $$
 - $w_t \sim ARIMA \; (p,d,q) \times (P,D,Q)$
 
 
-## Intervention analysis: interventional ARIMA[@schaffer2021interrupted]
+## Intervention analysis: interventional ARIMA
 
 ::: {.columns}
 ::: {.column width="68%"}
@@ -600,7 +611,7 @@ $$
 :::
 :::
 
-- You can model multiple interventions (e.g., step + ramp)
+- You can model multiple interventions (e.g., step + ramp)[@schaffer2021interrupted]
 - Interventions should be pre-specified
 
 
